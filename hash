@@ -1,0 +1,39 @@
+//哈希表的自定义实现
+#pragma once
+#include <vector>
+#include <list>
+using namespace std;
+template<typename K, typename V>
+class HashTable {
+private:
+    vector<list<pair<K, V>>> table;
+    int size;
+
+    int hashFunction(K key) {
+        return hash<K>{}(key) % size;
+    }
+
+public:
+    HashTable(int size = 100) : size(size), table(size) {}
+
+    void insert(K key, V value) {
+        int index = hashFunction(key);
+        for (auto& pair : table[index]) {
+            if (pair.first == key) {
+                pair.second = value;
+                return;
+            }
+        }
+        table[index].emplace_back(key, value);
+    }
+
+    V* get(K key) {
+        int index = hashFunction(key);
+        for (auto& pair : table[index]) {
+            if (pair.first == key) {
+                return &pair.second;
+            }
+        }
+        return nullptr;
+    }
+};
