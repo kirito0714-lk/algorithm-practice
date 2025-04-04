@@ -19,29 +19,34 @@ using namespace std;
 class Solution {
 public:
     vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
-        unordered_set<int> set1(nums1.begin(),nums1.end());
+        unordered_set<int> set1(nums1.begin(),nums1.end());//对set1进行去重
         unordered_set<int> set2;
-        for (int num :nums2)
+        for (int num :nums2)//从nums2中取出元素
         {
-            if(set1.count(num))
-            set2.insert(num);
+            if(set1.count(num))//如果从set1中找到了num2中的元素
+            set2.insert(num);//放入结果数组
         }
         return vector<int>(set2.begin(),set2.end());
     }
 };
 class Solution {
 public:
-    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
         unordered_map<int,int> hash;
         vector<int> res;
-        if(nums1.size()>nums2.size())
-        return intersection(nums2,nums1);
+        if(nums1.size()<nums2.size())
+        return intersect(nums2,nums1);//采用递归方式交换两数组大小，保证nums1的大小大于nums2的数组大小
         for (int num:nums1)
         hash[num]++;
         for (int i:nums2)
         {
-            if(hash.count(i)&&hash[i])
-            res.push_back(i);
+            if(hash.count(i)&&hash[i])//如果hash中存在这个元素且hash中这个数还有剩余，则说明含有交集
+            {
+               hash[i]--;
+               res.push_back(i);
+               if (hash[i]==0)
+               hash.erase(i);
+            }
         }
         return res;
     }
